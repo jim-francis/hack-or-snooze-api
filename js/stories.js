@@ -23,8 +23,12 @@ function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
+  //The solution provides the follow Boolean object wrapper, which seems like
+  //the simpliest way to check the favorite status of the object
+  const showStar = Boolean(currentUser);
   return $(`
       <li id="${story.storyId}">
+      ${showStar ? starHTML(story, currentUser) : ""}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -33,6 +37,17 @@ function generateStoryMarkup(story) {
         <small class="story-user">posted by ${story.username}</small>
       </li>
     `);
+}
+
+/** Star markup for favorite/regular stories */
+
+function starHTML(story, user) {
+  const isFavorite = user.isFavorite(story);
+  const starBtn = isFavorite ? "fas" : "far";
+  return `
+      <span class="star">
+        <i class="${starBtn} fa-star"></i>
+      </span>`;
 }
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */

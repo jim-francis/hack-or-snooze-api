@@ -199,4 +199,36 @@ class User {
       return null;
     }
   }
+
+  async addFavorite(story){
+    //add favorite to User object, call method to update API
+    this.favorites.push(story);
+    await this.updateFavorite("add", story);
+  }
+
+  async removeFavorites(story){
+    // if the story id is not the same as story.storyId, 
+    // push to new array and return array
+    //call method to update API
+    this.favorites = this.favorites.filter(s => s.storyId !== story.storyId);
+    await this.updateFavorite("remove", story);
+  }
+
+  async updateFavorite (state, story){
+    // definitely needed help with this!
+    // depending on method, will POST or DELETE favorite from saved user information
+    const method = state === "add" ? "POST" : "DELETE";
+    const token = this.loginToken;
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
+      method: method,
+      data: token
+    })
+  }
+
+  isFavorite(story){
+    //checks if story is favorite by comparing storyId 
+    return this.favorites.some(s => (s.storyId === story.storyId))
+  }
+
 }
