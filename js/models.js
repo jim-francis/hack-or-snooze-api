@@ -85,7 +85,17 @@ class StoryList {
 
     return story;
   }
-    // UNIMPLEMENTED: complete this function!
+
+    async removeStory(user, storyId){
+      const token = user.loginToken;
+      await axios({
+        url: `${BASE_URL}/stories/${storyId}`,
+        method: "DELETE",
+        data: { token: user.loginToken }
+      });
+      this.stories = this.stories.filter(story => story.storyId !== storyId);
+      user.favorites = user.favorites.filter(s => s.storyId !== storyId);
+    }
   }
 
 

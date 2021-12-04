@@ -26,9 +26,11 @@ function generateStoryMarkup(story) {
   //The solution provides the follow Boolean object wrapper, which seems like
   //the simpliest way to check the favorite status of the object
   const showStar = Boolean(currentUser);
+  const showDeleteBtn = Boolean(currentUser)
   return $(`
       <li id="${story.storyId}">
       ${showStar ? starHTML(story, currentUser) : ""}
+      ${showDeleteBtn ? deleteBtnHTML() : ""}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -38,6 +40,14 @@ function generateStoryMarkup(story) {
       </li>
     `);
 }
+
+function deleteBtnHTML() {
+  return `
+      <span class="trash-can">
+        <i class="fas fa-trash-alt"></i>
+      </span>`;
+}
+
 
 /** Star markup for favorite/regular stories */
 
@@ -83,6 +93,19 @@ async function submitNewStory(evt){
 }
 
 $submitForm.on("submit", submitNewStory);
+
+//Deleting stories
+async function deleteStory(evt) {
+  const $closestLi = $(evt.target).closest("li");
+  const storyId = $closestLi.attr("id");
+
+  await storyList.removeStory(currentUser, storyId);
+
+  await putStoriesOnPage();
+}
+
+$storiesLists.on("click", ".trash-can", deleteStory);
+
 
 //Favorite functionality
 
