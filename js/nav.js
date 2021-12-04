@@ -34,6 +34,14 @@ function navSubmitStoryClick(evt) {
 
 $navSubmitStory.on("click", navSubmitStoryClick);
 
+function navFavoritesClick(evt){
+  console.debug("navFavoritesClick", evt);
+  hidePageComponents();
+  putFavoritesOnPage();
+}
+
+$body.on("click", "#nav-favorites", navFavoritesClick)
+
 /** When a user first logins in, update the navbar to reflect that. */
 
 function updateNavOnLogin() {

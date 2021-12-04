@@ -206,7 +206,7 @@ class User {
     await this.updateFavorite("add", story);
   }
 
-  async removeFavorites(story){
+  async removeFavorite(story){
     // if the story id is not the same as story.storyId, 
     // push to new array and return array
     //call method to update API
@@ -222,7 +222,7 @@ class User {
     await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${story.storyId}`,
       method: method,
-      data: token
+      data: { token }
     })
   }
 

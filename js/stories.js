@@ -83,3 +83,37 @@ async function submitNewStory(evt){
 }
 
 $submitForm.on("submit", submitNewStory);
+
+//Favorite functionality
+
+function putFavoritesOnPage(){
+  $favoriteStories.empty();
+
+  if(currentUser.favorites.length === 0) {
+    $favoriteStories.append("No favorite stories! Like something!")
+  } else {
+    for (let story of currentUser.favorites){
+      const $story = generateStoryMarkup(story);
+      $favoriteStories.append($story)
+    }
+  }
+  $favoriteStories.show()
+}
+
+async function toggleFavorite(evt){
+  const $target = $(evt.target);
+  const $closestLi = $target.closest("li");
+  const storyId = $closestLi.attr("id");
+  //seaches for a storyId with a matching id on current user
+  const story = storyList.stories.find(s => s.storyId === storyId);
+
+  if ($target.hasClass("fas")){
+    await currentUser.removeFavorite(story)
+    $target.closest("i").toggleClass("fas far")
+  } else {
+    await currentUser.addFavorite(story);
+    $target.closest("i").toggleClass("fas far")
+  }
+}
+
+$storiesLists.on("click", ".star", toggleFavorite)
