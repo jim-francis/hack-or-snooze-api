@@ -19,17 +19,17 @@ async function getAndShowStoriesOnStart() {
  * Returns the markup for the story.
  */
 
-function generateStoryMarkup(story) {
+function generateStoryMarkup(story, showDeleteBtn = false) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
   //The solution provides the follow Boolean object wrapper, which seems like
   //the simpliest way to check the favorite status of the object
   const showStar = Boolean(currentUser);
-  const showDeleteBtn = Boolean(currentUser)
+
   return $(`
       <li id="${story.storyId}">
-      ${showStar ? starHTML(story, currentUser) : ""}
+      ${showStar ? getStarHTML(story, currentUser) : ""}
       ${showDeleteBtn ? deleteBtnHTML() : ""}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
@@ -51,7 +51,7 @@ function deleteBtnHTML() {
 
 /** Star markup for favorite/regular stories */
 
-function starHTML(story, user) {
+function getStarHTML(story, user) {
   const isFavorite = user.isFavorite(story);
   const starBtn = isFavorite ? "fas" : "far";
   return `
@@ -104,8 +104,8 @@ async function deleteStory(evt) {
   await putStoriesOnPage();
 }
 
-$storiesLists.on("click", ".trash-can", deleteStory);
-
+// $storiesLists.on("click", ".trash-can", deleteStory);
+$ownStories.on("click", ".trash-can", deleteStory);
 
 //Favorite functionality
 
@@ -140,3 +140,18 @@ async function toggleFavorite(evt){
 }
 
 $storiesLists.on("click", ".star", toggleFavorite)
+
+function putUserStoriesOnPage(){
+  $ownStories.empty();
+
+  if(currentUser.ownStories.length === 0){
+    $ownStories.append("No stories yet! Post something!")
+  } else {
+    for (let story of currentUser.ownStories) {
+      let $story = generateStoryMarkup(story, true);
+      $ownStories.append($story)
+    }
+  }
+
+  $ownStories.show();
+}

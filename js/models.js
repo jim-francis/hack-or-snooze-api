@@ -23,8 +23,7 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
-    return "hostname.com";
+    return new URL(this.url).host;
   }
 }
 
@@ -94,6 +93,7 @@ class StoryList {
         data: { token: user.loginToken }
       });
       this.stories = this.stories.filter(story => story.storyId !== storyId);
+      user.ownStories = user.ownStories.filter(s => s.storyId !== storyId);
       user.favorites = user.favorites.filter(s => s.storyId !== storyId);
     }
   }

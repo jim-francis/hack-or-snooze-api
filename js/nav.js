@@ -42,6 +42,15 @@ function navFavoritesClick(evt){
 
 $body.on("click", "#nav-favorites", navFavoritesClick)
 
+function navMyStoriesClick(evt){
+  console.debug("navMyStoriesClick", evt)
+  hidePageComponents();
+  putUserStoriesOnPage();
+  $ownStories.show();
+}
+
+$body.on("click", "#nav-my-stories", navMyStoriesClick)
+
 /** When a user first logins in, update the navbar to reflect that. */
 
 function updateNavOnLogin() {
