@@ -100,7 +100,6 @@ async function deleteStory(evt) {
   const storyId = $closestLi.attr("id");
 
   await storyList.removeStory(currentUser, storyId);
-
   await putStoriesOnPage();
 }
 
